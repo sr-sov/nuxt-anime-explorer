@@ -45,7 +45,7 @@ export default defineNuxtConfig({
   // no server runtime is required at deploy time. The shell is pre-rendered
   // for a fast first paint; dynamic detail routes are served by the SPA
   // fallback and hydrate against the live API.
-  ssr: true,
+  ssr: false,
 
   typescript: {
     strict: true,
