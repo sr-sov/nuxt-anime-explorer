@@ -24,6 +24,16 @@ export default defineNuxtConfig({
         },
         { name: 'theme-color', content: '#0a0a0f' },
       ],
+      // Icons live in public/ and ship to the GitHub Pages sub-path. The hrefs
+      // are baseURL-prefixed so they resolve correctly under /nuxt-anime-explorer/.
+      // The .ico is listed first as the legacy fallback; modern browsers pick the
+      // SVG. This also stops the browser's implicit /favicon.ico request (a 404
+      // on the live console before this was added).
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/nuxt-anime-explorer/favicon.ico' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/nuxt-anime-explorer/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/nuxt-anime-explorer/apple-touch-icon.png' },
+      ],
     },
   },
 
