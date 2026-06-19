@@ -1,0 +1,25 @@
+{
+  "name": "nuxt-anime-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Nuxt 3 anime-discovery app built on the Jikan (MyAnimeList) API.",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "6.14.0",
+    "nuxt": "3.21.8",
+    "typescript": "5.9.3",
+    "vue-tsc": "2.2.12"
+  },
+  "dependencies": {
+    "vue": "3.5.34",
+    "vue-router": "4.5.1"
+  }
+}
