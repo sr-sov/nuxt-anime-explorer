@@ -24,6 +24,22 @@ import type {
 
 const cache = new Map<string, unknown>()
 
+/**
+ * Build a stable cache key from a path plus sorted, cleaned query params.
+ * Pure and exported so the keying logic can be unit-tested in isolation.
+ */
+export function buildCacheKey(
+  path: string,
+  params?: Record<string, unknown>,
+): string {
+  if (!params) return path
+  const entries = Object.entries(params)
+    .filter(([, v]) => v !== undefined && v !== null && v !== '')
+    .sort(([a], [b]) => a.localeCompare(b))
+  const qs = entries.map(([k, v]) => `${k}=${String(v)}`).join('&')
+  return qs ? `${path}?${qs}` : path
+}
+
 /** Minimum spacing between outbound requests. ~3 req/s -> ~334ms; we pad it. */
 const MIN_REQUEST_SPACING_MS = 360
 let lastRequestAt = 0
@@ -50,16 +66,6 @@ function scheduleSlot(): Promise<void> {
 export function useJikan() {
   const base = useRuntimeConfig().public.jikanBase as string
 
-  /** Build a stable cache key from a path + sorted query params. */
-  function cacheKey(path: string, params?: Record<string, unknown>): string {
-    if (!params) return path
-    const entries = Object.entries(params)
-      .filter(([, v]) => v !== undefined && v !== null && v !== '')
-      .sort(([a], [b]) => a.localeCompare(b))
-    const qs = entries.map(([k, v]) => `${k}=${String(v)}`).join('&')
-    return qs ? `${path}?${qs}` : path
-  }
-
   /**
    * Core request: rate-guarded, cached, typed. Throws on non-2xx so callers
    * (and useAsyncData) can render an error state.
@@ -68,7 +74,7 @@ export function useJikan() {
     path: string,
     params?: Record<string, unknown>,
   ): Promise<T> {
-    const key = cacheKey(path, params)
+    const key = buildCacheKey(path, params)
     if (cache.has(key)) {
       return cache.get(key) as T
     }
