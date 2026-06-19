@@ -7,6 +7,8 @@ client-side so the whole thing deploys as a static site.
 
 **Live:** https://sr-sov.github.io/nuxt-anime-explorer/
 
+[![CI](https://github.com/sr-sov/nuxt-anime-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/sr-sov/nuxt-anime-explorer/actions/workflows/ci.yml)
+
 ## Stack
 
 - **Nuxt 3** (Vue 3, `<script setup>` + Composition API)
@@ -53,7 +55,8 @@ pages/
   index.vue                    Discovery: feed + search + genre filter
   anime/[id].vue               Detail page
 app.vue · error.vue            Shell + error boundary
-nuxt.config.ts · tailwind.config.ts
+test/                          Vitest unit tests (formatters, cache key, debounce)
+nuxt.config.ts · tailwind.config.ts · vitest.config.ts
 ```
 
 ## Run it
@@ -66,9 +69,24 @@ npm run dev          # http://localhost:3000
 Other scripts:
 
 ```bash
+npm test             # vitest run (unit tests)
 npm run typecheck    # vue-tsc / nuxi typecheck (strict)
 npm run generate     # static build -> .output/public
 ```
+
+## Testing & CI
+
+Unit tests ([Vitest](https://vitest.dev)) cover the pure, framework-light logic where bugs actually hide:
+
+- `test/useFormat.test.ts` — score / year / count / episode formatting and their missing-value fallbacks.
+- `test/cache-key.test.ts` — `buildCacheKey` (extracted from `useJikan` so the keying logic is testable in isolation): sorting params for a stable key, and dropping empty / undefined params.
+- `test/useDebounce.test.ts` — the debounce timing, with fake timers: the delayed update, and collapsing rapid changes to the final value.
+
+```bash
+npm test
+```
+
+GitHub Actions (`.github/workflows/ci.yml`) runs the strict typecheck and the unit tests on every push and pull request.
 
 ## Deploy (GitHub Pages)
 
