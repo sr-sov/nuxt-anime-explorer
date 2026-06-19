@@ -43,6 +43,7 @@ const {
   data: genreData,
   pending: genresPending,
   error: genresError,
+  refresh: refreshGenres,
 } = await useAsyncData<Genre[]>(
   'genres',
   async () => {
@@ -153,7 +154,7 @@ useHead({ title: 'Discover anime · Anime Explorer' })
           v-if="genresError"
           title="Couldn’t load genres"
           message="The genre list failed to load. The rest of the page still works."
-          @retry="() => refresh()"
+          @retry="() => refreshGenres()"
         />
         <GenreFilter
           v-else

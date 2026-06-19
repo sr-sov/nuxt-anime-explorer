@@ -11,6 +11,10 @@ export default defineNuxtConfig({
   // a sub-path. baseURL keeps generated asset/route URLs correct.
   app: {
     baseURL: '/nuxt-anime-explorer/',
+    // Smooth cross-fade between routes. The `.fade` classes live in
+    // assets/css/main.css; `out-in` avoids overlapping the two pages.
+    // prefers-reduced-motion collapses the transition duration (same CSS).
+    pageTransition: { name: 'fade', mode: 'out-in' },
     head: {
       htmlAttrs: { lang: 'en', class: 'dark' },
       title: 'Anime Explorer',
